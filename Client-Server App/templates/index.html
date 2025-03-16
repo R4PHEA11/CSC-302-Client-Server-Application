@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Player Stats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Basketball Player Stats</h1>
+        <input type="text" id="playerName" placeholder="Enter player name...">
+        <button onclick="getStats()">Get Stats</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function getStats() {
+            let playerName = document.getElementById("playerName").value;
+            fetch(`/player?name=${encodeURIComponent(playerName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("result").innerHTML = `<p class='error'>${data.error}</p>`;
+                    } else {
+                        document.getElementById("result").innerHTML = `
+                            <p><strong>${data.player}</strong></p>
+                            <p>Points: ${data.stats.points}</p>
+                            <p>Rebounds: ${data.stats.rebounds}</p>
+                            <p>Assists: ${data.stats.assists}</p>
+                        `;
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
